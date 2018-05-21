@@ -17,4 +17,15 @@ public class CalculatorTest {
 		assertEquals("The returning value should be the sum of both values", expectedValue, returningValue);
 	}
 
+	@Test
+	public void shouldMultiplyTwoValues() {
+		int firstValue = 10;
+		int secondValue = 20;
+		int expectedValue = 30;
+
+		int returningValue = new Calculator().multiply(firstValue, secondValue);
+
+		assertEquals(expectedValue, returningValue);
+	}
+
 }
