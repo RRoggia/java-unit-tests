@@ -1,7 +1,10 @@
 package com.sap.rroggia.bookstore;
 
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
@@ -56,18 +59,23 @@ public class LibraryTest {
 
 	}
 
-	@Test(expected = IllegalStateException.class)
+	@Test
 	public void shouldThrowExceptionOnPersist() {
 		Book book = new Book("Test");
 
 		BookTable booksTable = mock(BookTable.class);
 		when(booksTable.select(anyString())).thenReturn(null);
-		doThrow(new IllegalStateException()).when(booksTable).persist(book);
+		doThrow(new IllegalStateException("Lost db connection")).when(booksTable).persist(book);
 
 		Database mockDB = mock(Database.class);
 		when(mockDB.getTable(anyString())).thenReturn(booksTable);
 
-		new Library(mockDB).addBookToLibrary(book);
+		try {
+			new Library(mockDB).addBookToLibrary(book);
+			fail();
+		} catch (IllegalStateException e) {
+			assertThat(e.getMessage(), equalTo("Lost db connection"));
+		}
 	}
 
 }
