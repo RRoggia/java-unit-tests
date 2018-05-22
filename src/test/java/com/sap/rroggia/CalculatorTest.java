@@ -1,18 +1,24 @@
 package com.sap.rroggia;
 
-import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertThat;
+import static org.junit.Assert.fail;
 
 import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Before;
 import org.junit.BeforeClass;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 public class CalculatorTest {
 
 	private static Calculator calculator;
+
+	@Rule
+	public final ExpectedException thrown = ExpectedException.none();
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -27,16 +33,35 @@ public class CalculatorTest {
 
 	@Test
 	public void shouldAddTwoValues() {
-		assertThat(calculator.add(10, 20), is(30));
+		assertThat(calculator.add(10, 20), equalTo(30));
 	}
 
 	@Test
 	public void shouldMultiplyTwoValues() {
-		assertThat(calculator.multiply(10, 20), is(200));
+		assertThat(calculator.multiply(10, 20), equalTo(200));
 	}
 
 	@Test(expected = ArithmeticException.class)
 	public void shouldNotAllowDivisionByZero() {
+		calculator.divide(10, 0);
+	}
+
+	@Test
+	public void shouldNotAllowDivisionByZero2() {
+		try {
+			calculator.divide(10, 0);
+			fail();
+		} catch (ArithmeticException e) {
+			assertThat(e.getMessage(), equalTo("/ by zero"));
+		}
+	}
+
+	@Test
+	public void shouldNotAllowDivisionByZero3() {
+
+		thrown.expect(ArithmeticException.class);
+		thrown.expectMessage("/ by zero");
+
 		calculator.divide(10, 0);
 	}
 
