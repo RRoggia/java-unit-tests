@@ -35,6 +35,11 @@ public class CalculatorTest {
 		assertThat(calculator.multiply(10, 20), is(200));
 	}
 
+	@Test(expected = ArithmeticException.class)
+	public void shouldNotAllowDivisionByZero() {
+		calculator.divide(10, 0);
+	}
+
 	@Test
 	public void shouldReturnTheSameInstance() {
 		assertThat(Calculator.getInstance(), sameInstance(calculator));
