@@ -1,6 +1,8 @@
 package com.sap.rroggia;
 
+import static org.hamcrest.CoreMatchers.sameInstance;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 import org.junit.After;
 import org.junit.AfterClass;
@@ -17,7 +19,7 @@ public class CalculatorTest {
 	@BeforeClass
 	public static void setUpClass() {
 		System.out.println("Executed once before tests, when initializing the class.");
-		calculator = new Calculator();
+		calculator = Calculator.getInstance();
 	}
 
 	@Before
@@ -41,6 +43,11 @@ public class CalculatorTest {
 		int returningValue = calculator.multiply(firstValue, secondValue);
 
 		assertEquals(expectedValue, returningValue);
+	}
+
+	@Test
+	public void shouldReturnTheSameInstance() {
+		assertThat(Calculator.getInstance(), sameInstance(Calculator.getInstance()));
 	}
 
 	@After
