@@ -3,6 +3,7 @@ package com.sap.rroggia.bookstore;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -53,6 +54,20 @@ public class LibraryTest {
 
 		assertTrue(new Library(mockDB).hasBook(book));
 
+	}
+
+	@Test(expected = IllegalStateException.class)
+	public void shouldThrowExceptionOnPersist() {
+		Book book = new Book("Test");
+
+		BookTable booksTable = mock(BookTable.class);
+		when(booksTable.select(anyString())).thenReturn(null);
+		doThrow(new IllegalStateException()).when(booksTable).persist(book);
+
+		Database mockDB = mock(Database.class);
+		when(mockDB.getTable(anyString())).thenReturn(booksTable);
+
+		new Library(mockDB).addBookToLibrary(book);
 	}
 
 }
