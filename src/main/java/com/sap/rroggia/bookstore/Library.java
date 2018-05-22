@@ -5,11 +5,11 @@ import com.sap.rroggia.bookstore.db.Database;
 
 public class Library {
 
-	private Database db;
+	private BookTable booksTable;
 	private static final String BOOK_TABLE = "Book";
 
 	public Library(Database db) {
-		this.db = db;
+		this.booksTable = db.getTable(BOOK_TABLE);
 	}
 
 	public void addBookToLibrary(Book book) {
@@ -20,12 +20,10 @@ public class Library {
 		if (hasBook(book))
 			throw new IllegalArgumentException("Book already exists.");
 
-		BookTable booksTable = db.getTable(BOOK_TABLE);
 		booksTable.persist(book);
 	}
 
 	public boolean hasBook(Book book) {
-		BookTable booksTable = db.getTable(BOOK_TABLE);
 		return booksTable.select(book.getName()) != null ? true : false;
 	}
 

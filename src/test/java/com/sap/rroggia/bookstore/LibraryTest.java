@@ -4,6 +4,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import org.junit.Test;
@@ -12,6 +13,17 @@ import com.sap.rroggia.bookstore.db.BookTable;
 import com.sap.rroggia.bookstore.db.Database;
 
 public class LibraryTest {
+
+	@Test
+	public void shouldGetTheRightTable() {
+
+		Database mockDB = mock(Database.class);
+
+		new Library(mockDB);
+
+		verify(mockDB).getTable("Book");
+
+	}
 
 	@Test
 	public void shouldReturnFalseIfDontHaveBook() {
